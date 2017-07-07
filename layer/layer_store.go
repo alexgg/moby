@@ -12,6 +12,7 @@ import (
 	"github.com/docker/distribution"
 	"github.com/docker/docker/daemon/graphdriver"
 	"github.com/docker/docker/pkg/idtools"
+	"github.com/docker/docker/pkg/ioutils"
 	"github.com/docker/docker/pkg/plugingetter"
 	"github.com/docker/docker/pkg/stringid"
 	"github.com/docker/docker/pkg/system"
@@ -20,6 +21,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/vbatts/tar-split/tar/asm"
 	"github.com/vbatts/tar-split/tar/storage"
+	"github.com/docker/docker/pkg/tarsplitutils"
 )
 
 // maxLayerDepth represents the maximum number of
@@ -736,6 +738,40 @@ func (ls *layerStore) getTarStream(rl *roLayer) (io.ReadCloser, error) {
 	}()
 
 	return pr, nil
+}
+
+func (ls *layerStore) getTarSeekStream(rl *roLayer) (ioutils.ReadSeekCloser, error) {
+	if !ls.useTarSplit {
+		return nil, fmt.Errorf("unsupported backend driver for seek streams")
+	}
+
+	diffDriver, ok := ls.driver.(graphdriver.DiffGetterDriver)
+	if !ok {
+		diffDriver = &naiveDiffPathDriver{ls.driver}
+	}
+
+	metadata, err := ls.store.TarSplitReader(rl.chainID)
+	if err != nil {
+		return nil, err
+	}
+	defer metadata.Close()
+
+	// get our relative path to the container
+	fileGetCloser, err := diffDriver.DiffGetter(rl.cacheID)
+	if err != nil {
+		return nil, err
+	}
+
+	metaUnpacker := storage.NewJSONUnpacker(metadata)
+
+	stream, err := tarsplitutils.NewRandomAccessTarStream(fileGetCloser, metaUnpacker)
+	if err != nil {
+		return nil, err
+	}
+
+	return ioutils.NewReadSeekCloserWrapper(stream, func() error {
+		return fileGetCloser.Close()
+	}), nil
 }
 
 func (ls *layerStore) assembleTarTo(graphID string, metadata io.ReadCloser, size *int64, w io.Writer) error {
