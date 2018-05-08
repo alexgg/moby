@@ -423,22 +423,6 @@ func TestValidateConfiguration(t *testing.T) {
 				},
 			},
 		},
-		{
-			name: "with multiple node generic resources",
-			config: &Config{
-				CommonConfig: CommonConfig{
-					NodeGenericResources: []string{"foo=bar", "foo=baz"},
-				},
-			},
-		},
-		{
-			name: "with node generic resources",
-			config: &Config{
-				CommonConfig: CommonConfig{
-					NodeGenericResources: []string{"foo=1"},
-				},
-			},
-		},
 	}
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
