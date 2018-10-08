@@ -14,6 +14,7 @@ import (
 )
 
 func TestDaemonRestartKillContainers(t *testing.T) {
+	t.Skip("Pending balenaEngine compatibility investigation")
 	skip.If(t, testEnv.IsRemoteDaemon, "cannot start daemon on remote test run")
 	skip.If(t, testEnv.DaemonInfo.OSType == "windows")
 	skip.If(t, testEnv.IsRootless, "rootless mode doesn't support live-restore")
