@@ -303,7 +303,6 @@ RUN update-alternatives --set iptables  /usr/sbin/iptables-legacy  || true \
 
 RUN pip3 install yamllint==1.26.1
 
-COPY --from=dockercli     /build/ /usr/local/cli
 COPY --from=frozen-images /build/ /docker-frozen-images
 COPY --from=swagger       /build/ /usr/local/bin/
 COPY --from=tomlv         /build/ /usr/local/bin/
@@ -314,12 +313,9 @@ COPY --from=vndr          /build/ /usr/local/bin/
 COPY --from=gotestsum     /build/ /usr/local/bin/
 COPY --from=golangci_lint /build/ /usr/local/bin/
 COPY --from=shfmt         /build/ /usr/local/bin/
-COPY --from=runc          /build/ /usr/local/bin/
-COPY --from=containerd    /build/ /usr/local/bin/
 COPY --from=rootlesskit   /build/ /usr/local/bin/
 COPY --from=vpnkit        /build/ /usr/local/bin/
 COPY --from=proxy         /build/ /usr/local/bin/
-ENV PATH=/usr/local/cli:$PATH
 ARG DOCKER_BUILDTAGS
 ENV DOCKER_BUILDTAGS="${DOCKER_BUILDTAGS}"
 WORKDIR /go/src/github.com/docker/docker

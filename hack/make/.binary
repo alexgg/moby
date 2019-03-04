@@ -75,7 +75,7 @@ hash_files() {
 		windows/* | linux/mips* | linux/riscv*) ;;
 
 		*)
-			BUILDFLAGS+=("-buildmode=pie")
+			#BUILDFLAGS+=("-buildmode=pie")
 			;;
 	esac
 

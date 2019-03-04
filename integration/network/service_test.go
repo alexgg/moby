@@ -12,11 +12,14 @@ import (
 	"github.com/docker/docker/integration/internal/network"
 	"github.com/docker/docker/integration/internal/swarm"
 	"github.com/docker/docker/testutil/daemon"
+	"github.com/docker/libnetwork/drivers/bridge"
 	"gotest.tools/v3/assert"
 	"gotest.tools/v3/icmd"
 	"gotest.tools/v3/poll"
 	"gotest.tools/v3/skip"
 )
+
+const defaultNetworkBridge = bridge.DefaultBridgeName
 
 // delInterface removes given network interface
 func delInterface(t *testing.T, ifName string) {
@@ -60,7 +63,6 @@ func TestDaemonDefaultNetworkPools(t *testing.T) {
 	skip.If(t, testEnv.IsRemoteDaemon)
 	skip.If(t, versions.LessThan(testEnv.DaemonAPIVersion(), "1.38"), "skip test from new feature")
 	skip.If(t, testEnv.IsRootless, "rootless mode has different view of network")
-	defaultNetworkBridge := "docker0"
 	delInterface(t, defaultNetworkBridge)
 	d := daemon.New(t)
 	defer d.Stop(t)
@@ -103,7 +105,6 @@ func TestDaemonRestartWithExistingNetwork(t *testing.T) {
 	skip.If(t, testEnv.IsRemoteDaemon)
 	skip.If(t, versions.LessThan(testEnv.DaemonAPIVersion(), "1.38"), "skip test from new feature")
 	skip.If(t, testEnv.IsRootless, "rootless mode has different view of network")
-	defaultNetworkBridge := "docker0"
 	d := daemon.New(t)
 	d.Start(t)
 	defer d.Stop(t)
@@ -137,7 +138,6 @@ func TestDaemonRestartWithExistingNetworkWithDefaultPoolRange(t *testing.T) {
 	skip.If(t, testEnv.IsRemoteDaemon)
 	skip.If(t, versions.LessThan(testEnv.DaemonAPIVersion(), "1.38"), "skip test from new feature")
 	skip.If(t, testEnv.IsRootless, "rootless mode has different view of network")
-	defaultNetworkBridge := "docker0"
 	d := daemon.New(t)
 	d.Start(t)
 	defer d.Stop(t)
@@ -188,7 +188,6 @@ func TestDaemonWithBipAndDefaultNetworkPool(t *testing.T) {
 	skip.If(t, testEnv.IsRemoteDaemon)
 	skip.If(t, versions.LessThan(testEnv.DaemonAPIVersion(), "1.38"), "skip test from new feature")
 	skip.If(t, testEnv.IsRootless, "rootless mode has different view of network")
-	defaultNetworkBridge := "docker0"
 	d := daemon.New(t)
 	defer d.Stop(t)
 	d.Start(t,
