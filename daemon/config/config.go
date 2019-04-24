@@ -32,6 +32,14 @@ const (
 	// maximum number of uploads that
 	// may take place at a time for each push.
 	DefaultMaxConcurrentUploads = 5
+	// DefaultMaxDownloadAttempts is the default value for
+	// maximum number of times that
+	// a download may be retried during pull.
+	DefaultMaxDownloadAttempts = 5
+	// DefaultMaxUploadAttempts is the default value for
+	// maximum number of times that
+	// an upload may be retried during push.
+	DefaultMaxUploadAttempts = 5
 	// DefaultDownloadAttempts is the default value for
 	// maximum number of attempts that
 	// may take place at a time for each pull when the connection is lost.
@@ -197,9 +205,13 @@ type CommonConfig struct {
 	// may take place at a time for each push.
 	MaxConcurrentUploads *int `json:"max-concurrent-uploads,omitempty"`
 
-	// MaxDownloadAttempts is the maximum number of attempts that
-	// may take place at a time for each push.
+	// MaxDownloadAttempts is the maximum number of times that failling downloads
+	// will be retried for each pull.
 	MaxDownloadAttempts *int `json:"max-download-attempts,omitempty"`
+
+	// MaxUploadAttempts is the maximum number of times that failling uploads
+	// will be retried for each push.
+	MaxUploadAttempts *int `json:"max-upload-attempts,omitempty"`
 
 	// ShutdownTimeout is the timeout value (in seconds) the daemon will wait for the container
 	// to stop when daemon is being shutdown
@@ -572,7 +584,12 @@ func Validate(config *Config) error {
 	if config.MaxConcurrentUploads != nil && *config.MaxConcurrentUploads < 0 {
 		return fmt.Errorf("invalid max concurrent uploads: %d", *config.MaxConcurrentUploads)
 	}
+
 	if err := ValidateMaxDownloadAttempts(config); err != nil {
+		return err
+	}
+
+	if err := ValidateMaxUploadAttempts(config); err != nil {
 		return err
 	}
 
@@ -604,6 +621,14 @@ func Validate(config *Config) error {
 func ValidateMaxDownloadAttempts(config *Config) error {
 	if config.MaxDownloadAttempts != nil && *config.MaxDownloadAttempts <= 0 {
 		return fmt.Errorf("invalid max download attempts: %d", *config.MaxDownloadAttempts)
+	}
+	return nil
+}
+
+// ValidateMaxUploadAttempts validates if the max-upload-attempts is within the valid range
+func ValidateMaxUploadAttempts(config *Config) error {
+	if config.MaxUploadAttempts != nil && *config.MaxUploadAttempts <= 0 {
+		return fmt.Errorf("invalid max upload attempts: %d", *config.MaxUploadAttempts)
 	}
 	return nil
 }
