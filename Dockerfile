@@ -6,7 +6,7 @@ ARG SYSTEMD="false"
 ARG GO_VERSION=1.17.11
 ARG DEBIAN_FRONTEND=noninteractive
 ARG VPNKIT_VERSION=0.5.0
-ARG DOCKER_BUILDTAGS="apparmor seccomp"
+ARG DOCKER_BUILDTAGS="no_btrfs no_cri no_zfs exclude_disk_quota exclude_graphdriver_btrfs exclude_graphdriver_devicemapper exclude_graphdriver_zfs"
 
 ARG BASE_DEBIAN_DISTRO="buster"
 ARG GOLANG_IMAGE="golang:${GO_VERSION}-${BASE_DEBIAN_DISTRO}"
@@ -315,9 +315,11 @@ COPY --from=golangci_lint /build/ /usr/local/bin/
 COPY --from=shfmt         /build/ /usr/local/bin/
 COPY --from=rootlesskit   /build/ /usr/local/bin/
 COPY --from=vpnkit        /build/ /usr/local/bin/
-COPY --from=proxy         /build/ /usr/local/bin/
+#COPY --from=proxy         /build/ /usr/local/bin/
 ARG DOCKER_BUILDTAGS
 ENV DOCKER_BUILDTAGS="${DOCKER_BUILDTAGS}"
+ENV DOCKER_LDFLAGS -s
+
 WORKDIR /go/src/github.com/docker/docker
 VOLUME /var/lib/balena-engine
 VOLUME /home/unprivilegeduser/.local/share/docker
