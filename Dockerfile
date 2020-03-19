@@ -6,7 +6,7 @@ ARG SYSTEMD="false"
 ARG GO_VERSION=1.17.11
 ARG DEBIAN_FRONTEND=noninteractive
 ARG VPNKIT_VERSION=0.5.0
-ARG DOCKER_BUILDTAGS="no_btrfs no_cri no_zfs no_devmapper exclude_disk_quota exclude_graphdriver_btrfs exclude_graphdriver_devicemapper exclude_graphdriver_zfs"
+ARG DOCKER_BUILDTAGS="no_btrfs no_cri no_zfs no_devmapper exclude_disk_quota exclude_graphdriver_btrfs exclude_graphdriver_devicemapper exclude_graphdriver_zfs no_buildkit"
 
 ARG BASE_DEBIAN_DISTRO="buster"
 ARG GOLANG_IMAGE="golang:${GO_VERSION}-${BASE_DEBIAN_DISTRO}"
