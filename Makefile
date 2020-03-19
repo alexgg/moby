@@ -10,7 +10,7 @@ BUILDX ?= $(shell if [ -x "$(DOCKER_BUILDX_CLI_PLUGIN_PATH)" ]; then echo $(DOCK
 endif
 
 ifndef USE_BUILDX
-DOCKER_BUILDKIT := 1
+DOCKER_BUILDKIT := 0
 export DOCKER_BUILDKIT
 endif
 
