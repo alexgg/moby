@@ -1,4 +1,4 @@
-//go:build linux
+//go:build linux && !exclude_disk_quota && cgo
 // +build linux
 
 package quota // import "github.com/docker/docker/quota"
