@@ -26,6 +26,7 @@ import (
 
 func TestConfigInspect(t *testing.T) {
 	t.Skip("swarm isn't supported")
+
 	skip.If(t, testEnv.DaemonInfo.OSType == "windows")
 
 	defer setupTest(t)()
@@ -51,8 +52,8 @@ func TestConfigInspect(t *testing.T) {
 
 func TestConfigList(t *testing.T) {
 	t.Skip("swarm isn't supported")
-	skip.If(t, testEnv.DaemonInfo.OSType == "windows")
 
+	skip.If(t, testEnv.DaemonInfo.OSType == "windows")
 	defer setupTest(t)()
 	d := swarm.NewSwarm(t, testEnv)
 	defer d.Stop(t)

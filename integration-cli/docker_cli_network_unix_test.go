@@ -57,7 +57,6 @@ func (s *DockerNetworkSuite) SetUpSuite(c *testing.T) {
 }
 
 func setupRemoteNetworkDrivers(c *testing.T, mux *http.ServeMux, url, netDrv, ipamDrv string) {
-
 	mux.HandleFunc("/Plugin.Activate", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/vnd.docker.plugins.v1+json")
 		fmt.Fprintf(w, `{"Implements": ["%s", "%s"]}`, driverapi.NetworkPluginEndpointType, ipamapi.PluginEndpointType)
@@ -762,7 +761,6 @@ func (s *DockerNetworkSuite) TestDockerNetworkDriverOptions(c *testing.T) {
 	assert.Equal(c, opts["opt2"], "drv2")
 	dockerCmd(c, "network", "rm", "testopt")
 	assertNwNotAvailable(c, "testopt")
-
 }
 
 func (s *DockerNetworkSuite) TestDockerPluginV2NetworkDriver(c *testing.T) {
