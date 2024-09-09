@@ -33,8 +33,10 @@ import (
 	"gotest.tools/v3/icmd"
 )
 
-const dummyNetworkDriver = "dummy-network-driver"
-const dummyIPAMDriver = "dummy-ipam-driver"
+const (
+	dummyNetworkDriver = "dummy-network-driver"
+	dummyIPAMDriver    = "dummy-ipam-driver"
+)
 
 var remoteDriverNetworkRequest remoteapi.CreateNetworkRequest
 
@@ -92,7 +94,8 @@ func setupRemoteNetworkDrivers(c *testing.T, mux *http.ServeMux, url, netDrv, ip
 		w.Header().Set("Content-Type", "application/vnd.docker.plugins.v1+json")
 
 		veth := &netlink.Veth{
-			LinkAttrs: netlink.LinkAttrs{Name: "randomIfName", TxQLen: 0}, PeerName: "cnt0"}
+			LinkAttrs: netlink.LinkAttrs{Name: "randomIfName", TxQLen: 0}, PeerName: "cnt0",
+		}
 		if err := netlink.LinkAdd(veth); err != nil {
 			fmt.Fprintf(w, `{"Error":"failed to add veth pair: `+err.Error()+`"}`)
 		} else {
@@ -785,7 +788,6 @@ func (s *DockerNetworkSuite) TestDockerPluginV2NetworkDriver(c *testing.T) {
 	assertNwIsAvailable(c, "v2net")
 	dockerCmd(c, "network", "rm", "v2net")
 	assertNwNotAvailable(c, "v2net")
-
 }
 
 func (s *DockerDaemonSuite) TestDockerNetworkNoDiscoveryDefaultBridgeNetwork(c *testing.T) {
@@ -1569,6 +1571,7 @@ func (s *DockerSuite) TestUserDefinedNetworkConnectDisconnectAlias(c *testing.T)
 
 	// verify the alias option is rejected when running on predefined network
 	out, _, err := dockerCmdWithError("run", "--rm", "--name=any", "--net-alias=any", "busybox:glibc", "true")
+	assert.Assert(c, err != nil, "out: %s", out)
 	assert.Assert(c, err != nil, "out: %s", out)
 	assert.Assert(c, strings.Contains(out, runconfig.ErrUnsupportedNetworkAndAlias.Error()))
 	// verify the alias option is rejected when connecting to predefined network
