@@ -237,7 +237,6 @@ func (s *DockerRegistrySuite) TestListImagesWithoutDigests(c *testing.T) {
 }
 
 func (s *DockerRegistrySuite) TestListImagesWithDigests(c *testing.T) {
-
 	// setup image1
 	digest1, err := setupImageWithTag(c, "tag1")
 	assert.NilError(c, err, "error setting up image")
