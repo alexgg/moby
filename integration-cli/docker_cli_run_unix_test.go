@@ -591,6 +591,7 @@ func (s *DockerSuite) TestRunWithInvalidPathforBlkioDeviceWriteIOps(c *testing.T
 
 func (s *DockerSuite) TestRunOOMExitCode(c *testing.T) {
 	c.Skip("Pending balenaEngine compatibility investigation")
+
 	testRequires(c, memoryLimitSupport, swapMemorySupport, NotPpc64le)
 	errChan := make(chan error, 1)
 	go func() {

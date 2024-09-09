@@ -53,7 +53,6 @@ LABEL label.Z="Z"`))
 		actualValue := actualValues[i]
 		assert.Assert(c, strings.Contains(actualValue, echoValue))
 	}
-
 }
 
 func (s *DockerSuite) TestHistoryExistentImage(c *testing.T) {
