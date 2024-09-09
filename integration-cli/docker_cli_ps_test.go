@@ -118,7 +118,6 @@ func (s *DockerSuite) TestPsListContainersBase(c *testing.T) {
 
 	out, _ = dockerCmd(c, "ps", "-f", "since="+firstID, "-f", "before="+fourthID, "-n=1")
 	assert.Equal(c, assertContainerList(RemoveOutputForExistingElements(out, existingContainers), expected), true, fmt.Sprintf("SINCE filter, BEFORE filter, LIMIT: Container list is not in the correct order: \n%s", out))
-
 }
 
 func assertContainerList(out string, expected []string) bool {
@@ -589,7 +588,6 @@ func (s *DockerSuite) TestPsImageIDAfterUpdate(c *testing.T) {
 		f := strings.Fields(line)
 		assert.Equal(c, f[1], originalImageID)
 	}
-
 }
 
 func (s *DockerSuite) TestPsNotShowPortsOfStoppedContainer(c *testing.T) {
