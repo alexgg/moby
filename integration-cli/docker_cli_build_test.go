@@ -5605,7 +5605,6 @@ func (s *DockerSuite) TestBuildWithExtraHostInvalidFormat(c *testing.T) {
 			ExitCode: 125,
 		})
 	}
-
 }
 
 func (s *DockerSuite) TestBuildMultiStageCopyFromSyntax(c *testing.T) {

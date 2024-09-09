@@ -64,7 +64,6 @@ func (s *DockerSuite) TestExecInteractive(c *testing.T) {
 	case <-time.After(1 * time.Second):
 		c.Fatal("balena-engine exec failed to exit on stdin close")
 	}
-
 }
 
 func (s *DockerSuite) TestExecAfterContainerRestart(c *testing.T) {

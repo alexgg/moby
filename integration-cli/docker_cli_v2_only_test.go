@@ -27,6 +27,7 @@ func makefile(path string, contents string) (string, error) {
 // attempt to contact any v1 registry endpoints.
 func (s *DockerRegistrySuite) TestV2Only(c *testing.T) {
 	c.Skip("Pending balenaEngine compatibility investigation")
+
 	reg, err := registry.NewMock(c)
 	assert.NilError(c, err)
 	defer reg.Close()

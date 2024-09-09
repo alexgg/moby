@@ -74,7 +74,6 @@ func (s *DockerSuite) TestInspectStatus(c *testing.T) {
 	dockerCmd(c, "stop", out)
 	inspectOut = inspectField(c, out, "State.Status")
 	assert.Equal(c, inspectOut, "exited")
-
 }
 
 func (s *DockerSuite) TestInspectTypeFlagContainer(c *testing.T) {
