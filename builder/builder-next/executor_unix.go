@@ -1,5 +1,5 @@
 //go:build !windows
-// +build !windows,!no_buildkit
+// +build !windows
 
 package buildkit
 
