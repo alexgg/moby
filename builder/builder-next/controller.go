@@ -1,5 +1,3 @@
-// +build !no_buildkit
-
 package buildkit
 
 import (
