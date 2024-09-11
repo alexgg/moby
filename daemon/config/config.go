@@ -622,7 +622,7 @@ func ValidateMaxDownloadAttempts(config *Config) error {
 // ValidateMaxUploadAttempts validates if the max-upload-attempts is within the valid range
 func ValidateMaxUploadAttempts(config *Config) error {
 	if config.MaxUploadAttempts != nil && *config.MaxUploadAttempts <= 0 {
-		return fmt.Errorf("invalid max upload attempts: %d", *config.MaxUploadAttempts)
+		return fmt.Errorf("invalid max download attempts: %d", *config.MaxUploadAttempts)
 	}
 	return nil
 }
