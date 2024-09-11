@@ -30,7 +30,7 @@ func (s *DockerSuite) TestLogsAPIWithStdout(c *testing.T) {
 		err error
 	}
 
-	chLog := make(chan logOut, 1)
+	chLog := make(chan logOut)
 	res, body, err := request.Get(fmt.Sprintf("/containers/%s/logs?follow=1&stdout=1&timestamps=1", id))
 	assert.NilError(c, err)
 	assert.Equal(c, res.StatusCode, http.StatusOK)
@@ -116,8 +116,6 @@ func (s *DockerSuite) TestLogsAPIUntilFutureFollow(c *testing.T) {
 	}
 
 	chLog := make(chan logOut)
-	stop := make(chan struct{})
-	defer close(stop)
 
 	go func() {
 		bufReader := bufio.NewReader(reader)
@@ -128,20 +126,11 @@ func (s *DockerSuite) TestLogsAPIUntilFutureFollow(c *testing.T) {
 				if err == io.EOF {
 					return
 				}
-				select {
-				case <-stop:
+				chLog <- logOut{"", err}
 					return
-				case chLog <- logOut{"", err}:
 				}
 
-				return
-			}
-
-			select {
-			case <-stop:
-				return
-			case chLog <- logOut{strings.TrimSpace(string(out)), err}:
-			}
+			chLog <- logOut{strings.TrimSpace(string(out)), err}
 		}
 	}()
 
