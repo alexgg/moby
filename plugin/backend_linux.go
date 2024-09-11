@@ -6,7 +6,6 @@ import (
 	"compress/gzip"
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -29,7 +28,6 @@ import (
 	"github.com/docker/docker/errdefs"
 	"github.com/docker/docker/pkg/authorization"
 	"github.com/docker/docker/pkg/chrootarchive"
-	"github.com/docker/docker/pkg/ioutils"
 	"github.com/docker/docker/pkg/pools"
 	"github.com/docker/docker/pkg/progress"
 	"github.com/docker/docker/pkg/stringid"
@@ -45,14 +43,6 @@ import (
 var acceptedPluginFilterTags = map[string]bool{
 	"enabled":    true,
 	"capability": true,
-}
-
-func (s *tempConfigStore) GetTarSeekStream(d digest.Digest) (ioutils.ReadSeekCloser, error) {
-	return nil, fmt.Errorf("unimplemented")
-}
-
-func (s *pluginConfigStore) GetTarSeekStream(d digest.Digest) (ioutils.ReadSeekCloser, error) {
-	return nil, fmt.Errorf("unimplemented")
 }
 
 // Disable deactivates a plugin. This means resources (volumes, networks) cant use them.
