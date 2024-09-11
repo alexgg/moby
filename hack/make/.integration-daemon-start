@@ -108,7 +108,7 @@ if [ -z "$DOCKER_TEST_HOST" ]; then
 	# "pwd" tricks to make sure $DEST is an absolute path, not a relative one
 	export DOCKER_HOST="unix://$(cd "$DEST" && pwd)/balena-engine.sock"
 	(
-		echo "Starting ${dockerd}"
+		echo "Starting balena-engine-daemon"
 		[ -n "$TESTDEBUG" ] && set -x
 		exec \
 			${dockerd} --debug \
@@ -144,7 +144,7 @@ while ! ${TEST_CLIENT_BINARY} version &>/dev/null; do
 				echo >&2 "---"
 				# Important - use the docker on the CI host, not the one built locally
 				# which is currently in our path.
-				! /c/bin/balena-engine -H=$MAIN_DOCKER_HOST logs docker-$COMMITHASH
+				! /c/bin/docker -H=$MAIN_DOCKER_HOST logs docker-$COMMITHASH
 				echo >&2 "---"
 			fi
 		fi

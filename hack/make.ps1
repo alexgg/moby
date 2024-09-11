@@ -373,6 +373,37 @@ Function Run-IntegrationTests() {
     }
 }
 
+# Run the integration tests
+Function Run-IntegrationTests() {
+    $env:DOCKER_INTEGRATION_DAEMON_DEST = $root + "\bundles\tmp"
+    $dirs = go list -test -f '{{- if ne .ForTest `"`" -}}{{- .Dir -}}{{- end -}}' .\integration\...
+    $integration_api_dirs = @()
+    ForEach($dir in $dirs) {
+        $integration_api_dirs += $dir
+        Write-Host "Building test suite binary $dir"
+        go test -c -o "$dir\test.exe" $dir
+    }
+
+    ForEach($dir in $integration_api_dirs) {
+        Set-Location $dir
+        Write-Host "Running $($PWD.Path)"
+        $pinfo = New-Object System.Diagnostics.ProcessStartInfo
+        $pinfo.FileName = "$($PWD.Path)\test.exe"
+        $pinfo.WorkingDirectory = "$($PWD.Path)"
+        $pinfo.RedirectStandardError = $true
+        $pinfo.UseShellExecute = $false
+        $pinfo.Arguments = $env:INTEGRATION_TESTFLAGS
+        $p = New-Object System.Diagnostics.Process
+        $p.StartInfo = $pinfo
+        $p.Start() | Out-Null
+        $p.WaitForExit()
+        $err = $p.StandardError.ReadToEnd()
+        if (($LASTEXITCODE -ne 0) -and ($err -notlike "*warning: no tests to run*")) {
+            Throw "Integration tests failed: $err"
+        }
+    }
+}
+
 # Start of main code.
 Try {
     Write-Host -ForegroundColor Cyan "INFO: make.ps1 starting at $(Get-Date)"
