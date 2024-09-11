@@ -458,7 +458,6 @@ func initRouter(opts routerOptions) {
 	}
 
 	routers := []router.Router{
-		// we need to add the checkpoint router before the container router or the DELETE gets masked
 		container.NewRouter(opts.daemon, decoder, opts.daemon.RawSysInfo(true).CgroupUnified),
 		image.NewRouter(opts.daemon.ImageService()),
 		systemrouter.NewRouter(opts.daemon, nil, opts.buildkit, opts.features),
