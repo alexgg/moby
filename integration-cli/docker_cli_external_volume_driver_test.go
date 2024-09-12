@@ -456,8 +456,6 @@ func (s *DockerExternalVolumeSuite) TestExternalVolumeDriverBindExternalVolume(c
 	assert.Equal(c, len(mounts), 1, out)
 	assert.Equal(c, mounts[0].Name, "foo")
 	assert.Equal(c, mounts[0].Driver, volumePluginName)
-	assert.Equal(c, mounts[0].Name, "foo")
-	assert.Equal(c, mounts[0].Driver, volumePluginName)
 }
 
 func (s *DockerExternalVolumeSuite) TestExternalVolumeDriverList(c *testing.T) {

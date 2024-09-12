@@ -486,7 +486,6 @@ func (s *DockerDaemonSuite) TestDaemonIPv6FixedCIDRAndMac(c *testing.T) {
 // network=host the host ipv6 addresses are not removed
 func (s *DockerDaemonSuite) TestDaemonIPv6HostMode(c *testing.T) {
 	c.Skip("Pending balenaEngine compatibility investigation")
-
 	testRequires(c, testEnv.IsLocalDaemon)
 	deleteInterface(c, "balena0")
 
@@ -594,11 +593,11 @@ func (s *DockerDaemonSuite) TestDaemonKeyGeneration(c *testing.T) {
 	c.Skip("Pending balenaEngine compatibility investigation")
 
 	// TODO: skip or update for Windows daemon
-	os.Remove("/etc/docker/key.json")
+	os.Remove("/etc/balena-engine/key.json")
 	s.d.Start(c)
 	s.d.Stop(c)
 
-	k, err := libtrust.LoadKeyFile("/etc/docker/key.json")
+	k, err := libtrust.LoadKeyFile("/etc/balena-engine/key.json")
 	if err != nil {
 		c.Fatalf("Error opening key file")
 	}
