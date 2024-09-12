@@ -343,7 +343,7 @@ func (s *DockerSuite) TestPsListContainersFilterAncestorImage(c *testing.T) {
 	dockerCmd(c, "run", "--name=fifth", imageName2, "echo", "hello")
 	fifthID := getIDByName(c, "fifth")
 
-	filterTestSuite := []struct {
+	var filterTestSuite = []struct {
 		filterName  string
 		expectedIDs []string
 	}{
